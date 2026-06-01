@@ -1,4 +1,7 @@
 const navLinks = document.querySelectorAll(".nav-link");
+const managerEmailInput = document.querySelector(".manager-field-email input");
+const managerPrefixInput = document.querySelector(".manager-field-prefix input");
+const managerAddButton = document.querySelector(".manager-add-btn");
 const managerSelect = document.querySelector(".manager-select");
 const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
 const managerSelectValue = managerSelect?.querySelector(".manager-select-value");
@@ -114,6 +117,10 @@ function renderNavText(link) {
     wordSpacing: link.dataset.tab === "letters" ? 2 : link.dataset.tab === "settings" ? 4 : 0,
     weight: link.classList.contains("active") ? 400 : 300,
   });
+}
+
+function getNextManagerId() {
+  return String(Math.max(...managers.map((manager) => Number(manager.id))) + 1);
 }
 
 function renderManagersData() {
@@ -305,6 +312,30 @@ function setManagerSelectValue(value = "") {
   });
 }
 
+if (managerAddButton && managerEmailInput && managerPrefixInput) {
+  managerAddButton.addEventListener("click", () => {
+    const email = managerEmailInput.value.trim();
+    const prefix = managerPrefixInput.value.trim();
+
+    if (!email || !prefix) {
+      return;
+    }
+
+    managers.push({
+      id: getNextManagerId(),
+      email,
+      prefix,
+    });
+
+    managerEmailInput.value = "";
+    managerPrefixInput.value = "";
+
+    renderManagersData();
+    renderManagersPageText();
+    setManagerSelectValue(prefix);
+    setManagerSelectOpen(false);
+  });
+}
 if (managerSelect && managerSelectButton && managerSelectValue && managerSelectClear && managerSelectMenu) {
   setManagerSelectOpen(false);
   setManagerSelectValue("");
@@ -362,6 +393,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
