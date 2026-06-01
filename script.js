@@ -16,7 +16,6 @@ const managers = [
   { id: "28", email: "manager-p@mail.ru", prefix: "П" },
   { id: "29", email: "manager-sv@mail.ru", prefix: "Св" },
   { id: "30", email: "manager-yu@mail.ru", prefix: "Ю" },
-  { id: "31", email: "manager-ya@mail.ru", prefix: "Я" },
 ];
 
 const iconCodes = {
@@ -363,5 +362,6 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
