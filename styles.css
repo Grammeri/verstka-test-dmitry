@@ -320,10 +320,9 @@ h1 .svg-label {
 
 .import-card {
   width: calc(100vw - 2.08334vw);
-  height: 20.36458vw;
+  height: 39.16667vw;
   padding: 2.13542vw 1.77083vw 0;
   background: var(--card);
-  border: var(--figma-hairline) solid var(--page-card-border);
 }
 
 h1 {
@@ -688,13 +687,13 @@ h1 {
   cursor: pointer;
 }
 
-.manager-select-menu li:hover {
-  background: var(--manager-select-option-hover-bg);
+.manager-select-menu li.is-active {
+  background: var(--manager-select-option-active-bg);
 }
 
-.manager-select-menu li.is-active,
+.manager-select-menu li:hover,
 .manager-select-menu li.is-active:hover {
-  background: var(--manager-select-option-active-bg);
+  background: var(--manager-select-option-hover-bg);
 }
 
 .manager-form-title .svg-label {
@@ -727,3 +726,4 @@ h1 {
   width: 4.16667vw;
   height: 1.35417vw;
 }
+

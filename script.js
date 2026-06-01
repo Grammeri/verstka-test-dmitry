@@ -7,6 +7,18 @@ const managerSelectMenu = managerSelect?.querySelector(".manager-select-menu");
 const svgNS = "http://www.w3.org/2000/svg";
 const managerSelectDefaultLabel = managerSelectValue?.textContent.trim() || "Выбрать менеджера";
 
+const managers = [
+  { id: "23", email: "111nat@mail.ru", prefix: "Z" },
+  { id: "24", email: "manager-bus@mail.ru", prefix: "Бус" },
+  { id: "25", email: "manager-kas@mail.ru", prefix: "Кас" },
+  { id: "26", email: "manager-n@mail.ru", prefix: "Н" },
+  { id: "27", email: "manager-om@mail.ru", prefix: "Ом" },
+  { id: "28", email: "manager-p@mail.ru", prefix: "П" },
+  { id: "29", email: "manager-sv@mail.ru", prefix: "Св" },
+  { id: "30", email: "manager-yu@mail.ru", prefix: "Ю" },
+  { id: "31", email: "manager-ya@mail.ru", prefix: "Я" },
+];
+
 const iconCodes = {
   managers: [0xf105, 0xf106],
   resume: [0xf103, 0xf104],
@@ -105,6 +117,26 @@ function renderNavText(link) {
   });
 }
 
+function renderManagersData() {
+  const tableBody = document.querySelector(".managers-table tbody");
+
+  if (tableBody) {
+    tableBody.innerHTML = managers.map((manager, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${manager.id}</td>
+        <td>${manager.email}</td>
+        <td>${manager.prefix}</td>
+      </tr>
+    `).join("");
+  }
+
+  if (managerSelectMenu) {
+    managerSelectMenu.innerHTML = managers.map((manager) => `
+      <li role="option" data-value="${manager.prefix}" aria-selected="false">${manager.prefix}</li>
+    `).join("");
+  }
+}
 function renderManagersPageText() {
   const managerFormTitle = document.querySelector(".manager-form-title");
 
@@ -212,6 +244,7 @@ function renderStaticText() {
     });
   }
 
+  renderManagersData();
   renderManagersPageText();
 
   navLinks.forEach((link) => {
@@ -330,4 +363,5 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
