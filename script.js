@@ -2,6 +2,7 @@ const navLinks = document.querySelectorAll(".nav-link");
 const managerEmailInput = document.querySelector(".manager-field-email input");
 const managerPrefixInput = document.querySelector(".manager-field-prefix input");
 const managerAddButton = document.querySelector(".manager-add-btn");
+const managerRemoveButton = document.querySelector(".manager-remove-btn");
 const managerSelect = document.querySelector(".manager-select");
 const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
 const managerSelectValue = managerSelect?.querySelector(".manager-select-value");
@@ -336,6 +337,29 @@ if (managerAddButton && managerEmailInput && managerPrefixInput) {
     setManagerSelectOpen(false);
   });
 }
+if (managerRemoveButton && managerSelectMenu) {
+  managerRemoveButton.addEventListener("click", () => {
+    const selectedItem = managerSelectMenu.querySelector("li.is-active");
+    const selectedValue = selectedItem?.dataset.value;
+
+    if (!selectedValue) {
+      return;
+    }
+
+    const managerIndex = managers.findIndex((manager) => manager.prefix === selectedValue);
+
+    if (managerIndex === -1) {
+      return;
+    }
+
+    managers.splice(managerIndex, 1);
+
+    renderManagersData();
+    renderManagersPageText();
+    setManagerSelectValue("");
+    setManagerSelectOpen(false);
+  });
+}
 if (managerSelect && managerSelectButton && managerSelectValue && managerSelectClear && managerSelectMenu) {
   setManagerSelectOpen(false);
   setManagerSelectValue("");
@@ -393,6 +417,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
