@@ -1,0 +1,11 @@
+.vercel/
+_backup_start/
+_local_backups/
+_delivery_ready/
+_final_zip_check/
+_customer_zip_check/
+_figma_reference/
+figma_reference/
+Final/
+journal-managers/
+*.zip

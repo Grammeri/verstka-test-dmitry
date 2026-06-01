@@ -1,0 +1,333 @@
+const navLinks = document.querySelectorAll(".nav-link");
+const managerSelect = document.querySelector(".manager-select");
+const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
+const managerSelectValue = managerSelect?.querySelector(".manager-select-value");
+const managerSelectClear = managerSelect?.querySelector(".manager-select-clear");
+const managerSelectMenu = managerSelect?.querySelector(".manager-select-menu");
+const svgNS = "http://www.w3.org/2000/svg";
+const managerSelectDefaultLabel = managerSelectValue?.textContent.trim() || "Выбрать менеджера";
+
+const iconCodes = {
+  managers: [0xf105, 0xf106],
+  resume: [0xf103, 0xf104],
+  companies: [0xf10b, 0xf10c],
+  import: [0xf109, 0xf10a],
+  ads: [0xf10d, 0xf10e],
+  letters: [0xf107, 0xf108],
+  settings: [0xf101, 0xf102],
+};
+const navTextWidths = {
+  managers: 240,
+  resume: 87,
+  companies: 110,
+  import: 76,
+  ads: 145,
+  letters: 152,
+  settings: 189,
+};
+function createSvgText(text, options = {}) {
+  const svg = document.createElementNS(svgNS, "svg");
+  const label = document.createElementNS(svgNS, "text");
+  const width = options.width || 260;
+  const height = options.height || 30;
+  const fontSize = options.size || 20;
+
+  svg.classList.add("svg-label");
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
+  svg.setAttribute("aria-hidden", "true");
+  svg.style.overflow = "visible";
+
+  label.setAttribute("x", options.x ?? 0);
+  label.setAttribute("y", options.y ?? Math.round(fontSize * 0.82));
+
+  if (options.anchor) {
+    label.setAttribute("text-anchor", options.anchor);
+  }
+
+  label.setAttribute("fill", options.color || "currentColor");
+  label.setAttribute("font-family", options.family || "Roboto, Arial, sans-serif");
+  label.setAttribute("font-size", fontSize);
+  label.setAttribute("font-weight", options.weight || 300);
+
+  if (options.wordSpacing) {
+    label.setAttribute("word-spacing", options.wordSpacing);
+  }
+
+  label.textContent = text;
+  svg.append(label);
+
+  return svg;
+}
+function renderElementText(element, options = {}) {
+  const text = options.text || element.dataset.text || element.textContent.trim();
+
+  element.dataset.text = text;
+  element.setAttribute("aria-label", text);
+  element.textContent = "";
+  element.append(createSvgText(text, options));
+}
+function renderIcon(link, hovered = false) {
+  const icon = link.querySelector(".icon");
+  const tab = link.dataset.tab;
+  const isResume = tab === "resume";
+
+  if (!icon || !iconCodes[tab]) {
+    return;
+  }
+
+  icon.textContent = "";
+  icon.append(createSvgText(String.fromCharCode(iconCodes[tab][hovered ? 1 : 0]), {
+    family: "vsevn-icons",
+    size: 34,
+    width: 44,
+    height: 44,
+    x: isResume ? 12 : 22,
+    y: 40,
+    anchor: "middle",
+  }));
+}
+
+function renderNavText(link) {
+  const text = link.querySelector(".nav-text");
+
+  if (!text) {
+    return;
+  }
+  renderElementText(text, {
+    size: 21,
+    width: navTextWidths[link.dataset.tab] || 180,
+    height: 24,
+    x: 0,
+    y: 19,
+    wordSpacing: link.dataset.tab === "letters" ? 2 : link.dataset.tab === "settings" ? 4 : 0,
+    weight: link.classList.contains("active") ? 400 : 300,
+  });
+}
+
+function renderManagersPageText() {
+  const managerFormTitle = document.querySelector(".manager-form-title");
+
+  if (managerFormTitle) {
+    renderElementText(managerFormTitle, {
+      size: 21,
+      width: 340,
+      height: 28,
+      y: 20,
+      x: 0,
+      weight: 300,
+      color: "#62560e",
+    });
+  }
+
+  document.querySelectorAll(".manager-field span").forEach((element) => {
+    const field = element.closest(".manager-field");
+    const isPrefix = field?.classList.contains("manager-field-prefix");
+
+    renderElementText(element, {
+      text: element.textContent.trim(),
+      size: 21.6,
+      width: isPrefix ? 130 : 90,
+      height: 26,
+      y: 15,
+      weight: 200,
+      color: "#62560e",
+    });
+  });
+
+  document.querySelectorAll(".managers-table th, .managers-table td").forEach((cell) => {
+    const text = cell.textContent.trim();
+    const columnIndex = cell.cellIndex;
+    const widths = [48, 48, 330, 120];
+
+    const isHead = cell.tagName === "TH";
+    const isBody = cell.tagName === "TD";
+
+    let textX = 0;
+    let textY = 20;
+    let textSize = 21;
+    if (isHead && columnIndex === 0) {
+      textX = 6;
+      textY = 20;
+      textSize = 21;
+    }
+
+    if (isHead && columnIndex === 1) {
+      textX = 7;
+      textY = 18;
+      textSize = 21;
+    }
+
+    if (isBody && columnIndex === 0) {
+      textX = 5;
+      textY = 19;
+      textSize = 21;
+    }
+
+    if (isBody && columnIndex === 1) {
+      textX = 2;
+      textY = 19;
+      textSize = 21;
+    }
+    if (columnIndex === 3) {
+      textSize = 23;
+    }
+
+    renderElementText(cell, {
+      text,
+      size: textSize,
+      width: widths[columnIndex] || 160,
+      height: 26,
+      x: textX,
+      y: textY,
+      weight: 300,
+      color: columnIndex === 1 ? "#0087fc" : "#62560e",
+    });
+  });
+
+  document.querySelectorAll(".manager-select-menu li").forEach((item) => {
+    renderElementText(item, {
+      text: item.dataset.value || item.textContent.trim(),
+      size: 21,
+      width: 80,
+      height: 26,
+      y: 20,
+      weight: 300,
+      color: "currentColor",
+    });
+  });
+}
+
+function renderStaticText() {
+  const title = document.querySelector("#managers-title");
+
+  if (title) {
+    renderElementText(title, {
+      size: 21,
+      width: 240,
+      height: 29,
+      y: 22,
+      weight: 400,
+      color: "#62560E",
+    });
+  }
+
+  renderManagersPageText();
+
+  navLinks.forEach((link) => {
+    renderIcon(link);
+    renderNavText(link);
+  });
+}
+
+renderStaticText();
+
+function setManagerSelectOpen(isOpen) {
+  if (!managerSelect || !managerSelectButton || !managerSelectMenu) {
+    return;
+  }
+
+  managerSelect.classList.toggle("manager-select--open", isOpen);
+  managerSelectButton.setAttribute("aria-expanded", String(isOpen));
+  managerSelectMenu.hidden = !isOpen;
+}
+
+function renderManagerSelectValue(value = "") {
+  if (!managerSelectButton || !managerSelectValue) {
+    return;
+  }
+  const text = value || managerSelectDefaultLabel;
+  const isDefault = !value;
+  const displayText = isDefault ? text.toUpperCase() : text;
+
+  managerSelectValue.textContent = "";
+  managerSelectValue.append(createSvgText(displayText, {
+    size: isDefault ? 21.6 : 21,
+    width: isDefault ? 232 : 80,
+    height: 26,
+    x: isDefault ? -1 : 2,
+    y: isDefault ? 19 : 18,
+    weight: 300,
+    color: "currentColor",
+  }));
+
+  managerSelectButton.setAttribute("aria-label", text);
+}
+
+function setManagerSelectValue(value = "") {
+  if (!managerSelect || !managerSelectValue || !managerSelectClear || !managerSelectMenu) {
+    return;
+  }
+
+  const hasValue = Boolean(value);
+
+  renderManagerSelectValue(value);
+  managerSelect.classList.toggle("manager-select--selected", hasValue);
+  managerSelectClear.hidden = !hasValue;
+
+  managerSelectMenu.querySelectorAll("li").forEach((item) => {
+    const isSelected = item.dataset.value === value;
+
+    item.classList.toggle("is-active", isSelected);
+    item.setAttribute("aria-selected", String(isSelected));
+  });
+}
+
+if (managerSelect && managerSelectButton && managerSelectValue && managerSelectClear && managerSelectMenu) {
+  setManagerSelectOpen(false);
+  setManagerSelectValue("");
+
+  managerSelectButton.addEventListener("click", () => {
+    setManagerSelectOpen(managerSelectMenu.hidden);
+  });
+
+  managerSelectClear.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    setManagerSelectValue("");
+    setManagerSelectOpen(false);
+    managerSelectButton.focus();
+  });
+
+  managerSelectMenu.addEventListener("click", (event) => {
+    const item = event.target.closest("li[data-value]");
+
+    if (!item) {
+      return;
+    }
+
+    setManagerSelectValue(item.dataset.value || "");
+    setManagerSelectOpen(false);
+    managerSelectButton.focus();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!managerSelect.contains(event.target)) {
+      setManagerSelectOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setManagerSelectOpen(false);
+      managerSelectButton.focus();
+    }
+  });
+}
+
+navLinks.forEach((link) => {
+  link.addEventListener("mouseenter", () => renderIcon(link, true));
+  link.addEventListener("mouseleave", () => renderIcon(link, false));
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    navLinks.forEach((item) => {
+      item.classList.remove("active");
+      renderNavText(item);
+    });
+
+    link.classList.add("active");
+    renderNavText(link);
+  });
+});
+
