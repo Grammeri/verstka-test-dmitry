@@ -270,10 +270,6 @@ function renderManagersPageText() {
       textY = 19;
       textSize = 21;
     }
-    if (columnIndex === 3) {
-      textSize = 23;
-    }
-
     renderElementText(cell, {
       text,
       size: textSize,
@@ -455,8 +451,54 @@ if (managerRowActions) {
     setManagerSelectOpen(false);
   });
 }
-function startManagerCellEdit(cell) {
-  const manager = managers.find((item) => item.id === cell.dataset.id);
+function getManagerEditCaretPosition(input, event) {
+  const value = input.value;
+
+  if (!value || typeof event?.clientX !== "number") {
+    return value.length;
+  }
+
+  const rect = input.getBoundingClientRect();
+  const styles = getComputedStyle(input);
+  const paddingLeft = parseFloat(styles.paddingLeft) || 0;
+  const paddingRight = parseFloat(styles.paddingRight) || 0;
+  const maxTextX = rect.width - paddingLeft - paddingRight;
+  const textX = Math.max(
+    0,
+    Math.min(event.clientX - rect.left - paddingLeft + input.scrollLeft, maxTextX)
+  );
+
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return value.length;
+  }
+
+  context.font = `${styles.fontStyle} ${styles.fontVariant} ${styles.fontWeight} ${styles.fontSize} ${styles.fontFamily}`;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const before = context.measureText(value.slice(0, index)).width;
+    const after = context.measureText(value.slice(0, index + 1)).width;
+    const middle = before + ((after - before) / 2);
+
+    if (textX < middle) {
+      return index;
+    }
+  }
+
+  return value.length;
+}
+
+function setManagerEditCaret(input, event) {
+  const caretPosition = getManagerEditCaretPosition(input, event);
+
+  input.focus();
+  input.setSelectionRange(caretPosition, caretPosition);
+}
+
+function startManagerCellEdit(cell, event) {
+  const manager = managers.find((item) => String(item.id) === cell.dataset.id);
   const field = cell.dataset.field;
 
   if (!manager || !field || cell.querySelector("input")) {
@@ -467,8 +509,10 @@ function startManagerCellEdit(cell) {
   const input = document.createElement("input");
 
   input.className = "manager-table-edit-input";
+  input.classList.add(`manager-table-edit-input--${field}`);
   input.value = oldValue;
-  input.type = field === "email" ? "email" : "text";
+  input.type = "text";
+  input.inputMode = field === "email" ? "email" : "text";
   input.setAttribute("aria-label", field === "email" ? "Email" : "Префикс");
   input.setAttribute("autocomplete", "off");
   input.setAttribute("spellcheck", "false");
@@ -477,8 +521,7 @@ function startManagerCellEdit(cell) {
 
   cell.textContent = "";
   cell.append(input);
-  input.focus();
-  input.select();
+  setManagerEditCaret(input, event);
 
   const finishEdit = () => {
     const newValue = input.value.trim();
@@ -511,10 +554,6 @@ function startManagerCellEdit(cell) {
     return true;
   };
 
-  input.addEventListener("blur", () => {
-    finishEdit();
-  });
-
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -536,7 +575,7 @@ if (managersTableBody) {
       return;
     }
 
-    startManagerCellEdit(cell);
+    startManagerCellEdit(cell, event);
   });
 }
 if (managerSelect && managerSelectButton && managerSelectValue && managerSelectClear && managerSelectMenu) {
