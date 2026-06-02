@@ -11,7 +11,9 @@ const managerSelectMenu = managerSelect?.querySelector(".manager-select-menu");
 const svgNS = "http://www.w3.org/2000/svg";
 const managerSelectDefaultLabel = managerSelectValue?.textContent.trim() || "Выбрать менеджера";
 
-const managers = [
+const managersStorageKey = "journalManagers";
+
+const defaultManagers = [
   { id: "23", email: "111nat@mail.ru", prefix: "Z" },
   { id: "24", email: "manager-bus@mail.ru", prefix: "Бус" },
   { id: "25", email: "manager-kas@mail.ru", prefix: "Кас" },
@@ -21,6 +23,26 @@ const managers = [
   { id: "29", email: "manager-sv@mail.ru", prefix: "Св" },
   { id: "30", email: "manager-yu@mail.ru", prefix: "Ю" },
 ];
+
+const loadManagers = () => {
+  try {
+    const savedManagers = JSON.parse(localStorage.getItem(managersStorageKey));
+
+    if (Array.isArray(savedManagers)) {
+      return savedManagers;
+    }
+  } catch {
+    return [...defaultManagers];
+  }
+
+  return [...defaultManagers];
+};
+
+const saveManagers = () => {
+  localStorage.setItem(managersStorageKey, JSON.stringify(managers));
+};
+
+const managers = loadManagers();
 
 const iconCodes = {
   managers: [0xf105, 0xf106],
@@ -121,7 +143,9 @@ function renderNavText(link) {
 }
 
 function getNextManagerId() {
-  return String(Math.max(...managers.map((manager) => Number(manager.id))) + 1);
+  const ids = managers.map((manager) => Number(manager.id)).filter(Number.isFinite);
+
+  return String((ids.length ? Math.max(...ids) : 22) + 1);
 }
 
 function renderManagersData() {
@@ -328,6 +352,8 @@ if (managerAddButton && managerEmailInput && managerPrefixInput) {
       prefix,
     });
 
+    saveManagers();
+
     managerEmailInput.value = "";
     managerPrefixInput.value = "";
 
@@ -353,6 +379,7 @@ if (managerRemoveButton && managerSelectMenu) {
     }
 
     managers.splice(managerIndex, 1);
+    saveManagers();
 
     renderManagersData();
     renderManagersPageText();
@@ -417,6 +444,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
