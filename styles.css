@@ -52,7 +52,7 @@
   --manager-select-option-active-bg: #f6fbff;
 
   --manager-select-focus-border: var(--blue);
-  --manager-select-active-border-width: 0.07813vw;
+  --manager-select-active-border-width: 2px;
 }
 
 @font-face {
@@ -649,15 +649,18 @@ h1 {
   cursor: pointer;
 }
 
-.manager-select--open .manager-select-btn,
-.manager-select-btn:hover,
-.manager-select-btn:focus-visible {
+.manager-select-btn:hover {
   border-color: var(--manager-select-focus-border);
+  border-width: var(--figma-hairline);
   outline: 0;
 }
 
-.manager-select--open .manager-select-btn {
+.manager-select--open .manager-select-btn,
+.manager-select-btn:active,
+.manager-select-btn:focus-visible {
+  border-color: var(--manager-select-focus-border);
   border-width: var(--manager-select-active-border-width);
+  outline: 0;
 }
 
 .manager-select--selected .manager-select-btn {
@@ -823,12 +826,3 @@ h1 {
   width: 4.16667vw;
   height: 1.35417vw;
 }
-
-
-
-
-
-
-
-
-
