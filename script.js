@@ -340,18 +340,28 @@ function setManagerSelectValue(value = "") {
   });
 }
 
+function showInputError(input, message) {
+  input.setCustomValidity(message);
+  input.reportValidity();
+  input.focus();
+
+  input.addEventListener("input", () => {
+    input.setCustomValidity("");
+  }, { once: true });
+}
+
 if (managerAddButton && managerEmailInput && managerPrefixInput) {
   managerAddButton.addEventListener("click", () => {
     const email = managerEmailInput.value.trim();
     const prefix = managerPrefixInput.value.trim();
 
     if (!email) {
-      managerEmailInput.focus();
+      showInputError(managerEmailInput, "Заполните Email");
       return;
     }
 
     if (!prefix) {
-      managerPrefixInput.focus();
+      showInputError(managerPrefixInput, "Заполните префикс");
       return;
     }
 
@@ -453,6 +463,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
