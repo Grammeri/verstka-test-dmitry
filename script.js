@@ -3,6 +3,7 @@ const managerEmailInput = document.querySelector(".manager-field-email input");
 const managerPrefixInput = document.querySelector(".manager-field-prefix input");
 const managerAddButton = document.querySelector(".manager-add-btn");
 const managerRowActions = document.querySelector(".manager-row-actions");
+const managersTableBody = document.querySelector(".managers-table tbody");
 const managerSelect = document.querySelector(".manager-select");
 const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
 const managerSelectValue = managerSelect?.querySelector(".manager-select-value");
@@ -156,13 +157,18 @@ function updateManagersCardHeight() {
   }
 
   const baseHeight = 39.16667;
+  const bottomGap = 1.5625;
+
   const tableTop = 11.5625;
   const tableHeadHeight = 3.125;
   const tableRowHeight = 2.55208;
-  const bottomGap = 1.5625;
-  const contentHeight = tableTop + tableHeadHeight + managers.length * tableRowHeight + bottomGap;
+  const tableHeight = tableTop + tableHeadHeight + managers.length * tableRowHeight + bottomGap;
 
-  card.style.height = `${Math.max(baseHeight, contentHeight)}vw`;
+  const selectTop = 14.6875;
+  const controlHeight = 2.60417;
+  const selectHeight = selectTop + controlHeight + managers.length * controlHeight + bottomGap;
+
+  card.style.height = `${Math.max(baseHeight, tableHeight, selectHeight)}vw`;
 }
 
 function getSortedManagers() {
@@ -180,8 +186,8 @@ function renderManagersData() {
       <tr>
         <td>${index + 1}</td>
         <td>${manager.id}</td>
-        <td>${manager.email}</td>
-        <td>${manager.prefix}</td>
+        <td class="manager-editable-cell" data-id="${manager.id}" data-field="email">${manager.email}</td>
+        <td class="manager-editable-cell" data-id="${manager.id}" data-field="prefix">${manager.prefix}</td>
       </tr>
     `).join("");
   }
@@ -449,6 +455,90 @@ if (managerRowActions) {
     setManagerSelectOpen(false);
   });
 }
+function startManagerCellEdit(cell) {
+  const manager = managers.find((item) => item.id === cell.dataset.id);
+  const field = cell.dataset.field;
+
+  if (!manager || !field || cell.querySelector("input")) {
+    return;
+  }
+
+  const oldValue = manager[field];
+  const input = document.createElement("input");
+
+  input.className = "manager-table-edit-input";
+  input.value = oldValue;
+  input.type = field === "email" ? "email" : "text";
+  input.setAttribute("aria-label", field === "email" ? "Email" : "Префикс");
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("spellcheck", "false");
+  input.setAttribute("autocorrect", "off");
+  input.setAttribute("autocapitalize", "off");
+
+  cell.textContent = "";
+  cell.append(input);
+  input.focus();
+  input.select();
+
+  const finishEdit = () => {
+    const newValue = input.value.trim();
+
+    input.setCustomValidity("");
+
+    if (field === "email" && !newValue) {
+      showInputError(input, "Заполните Email");
+      return false;
+    }
+
+    if (field === "email" && !isValidEmail(newValue)) {
+      showInputError(input, "Введите корректный Email");
+      return false;
+    }
+
+    if (field === "prefix" && !newValue) {
+      showInputError(input, "Заполните префикс");
+      return false;
+    }
+
+    manager[field] = newValue;
+    saveManagers();
+
+    renderManagersData();
+    renderManagersPageText();
+    setManagerSelectValue("");
+    setManagerSelectOpen(false);
+
+    return true;
+  };
+
+  input.addEventListener("blur", () => {
+    finishEdit();
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      finishEdit();
+    }
+
+    if (event.key === "Escape") {
+      renderManagersData();
+      renderManagersPageText();
+    }
+  });
+}
+
+if (managersTableBody) {
+  managersTableBody.addEventListener("click", (event) => {
+    const cell = event.target.closest(".manager-editable-cell");
+
+    if (!cell) {
+      return;
+    }
+
+    startManagerCellEdit(cell);
+  });
+}
 if (managerSelect && managerSelectButton && managerSelectValue && managerSelectClear && managerSelectMenu) {
   setManagerSelectOpen(false);
   setManagerSelectValue("");
@@ -506,6 +596,8 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
+
 
 
 

@@ -600,6 +600,28 @@ h1 {
   width: 6.71875vw;
 }
 
+.manager-editable-cell {
+  position: relative;
+  cursor: text;
+}
+
+.manager-table-edit-input {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 0.52083vw;
+  border: 0;
+  background: transparent;
+  color: var(--manager-control-icon);
+  font: inherit;
+  font-size: 1.09375vw;
+  font-weight: 300;
+  line-height: var(--manager-table-body-row-height);
+  outline: 0;
+}
+
 .manager-select {
   position: absolute;
   left: 46.71875vw;
@@ -797,6 +819,7 @@ h1 {
   width: 4.16667vw;
   height: 1.35417vw;
 }
+
 
 
 
