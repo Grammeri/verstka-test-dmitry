@@ -477,6 +477,69 @@ h1 {
   color: transparent;
 }
 
+.manager-add-btn:hover,
+.manager-remove-btn:hover {
+  background: #a69e74;
+}
+
+.manager-add-btn:hover::before,
+.manager-add-btn:hover::after,
+.manager-remove-btn:hover::before {
+  background: #ffffff;
+}
+
+.manager-row-actions {
+  position: absolute;
+  left: 40.20833vw;
+  top: 14.6875vw;
+  width: var(--manager-control-height);
+  z-index: 4;
+}
+
+.manager-row-remove-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  display: block;
+  width: var(--manager-control-height);
+  height: var(--manager-table-body-row-height);
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: var(--figma-hairline) solid var(--manager-control-border);
+  border-radius: 0;
+  background: var(--manager-control-bg);
+  color: transparent;
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.manager-row-remove-btn + .manager-row-remove-btn {
+  border-top: 0;
+}
+
+.manager-row-remove-btn::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--manager-action-icon-size);
+  height: var(--manager-action-icon-stroke);
+  background: var(--manager-action-icon);
+  transform: translate(-50%, -50%);
+}
+
+.manager-row-remove-btn:hover {
+  background: #a69e74;
+}
+
+.manager-row-remove-btn:hover::before {
+  background: #ffffff;
+}
+
 .managers-table {
   position: absolute;
   left: 1.61458vw;
@@ -506,6 +569,14 @@ h1 {
 
 .managers-table td {
   height: var(--manager-table-body-row-height);
+}
+
+.managers-table tbody tr:nth-child(odd) td {
+  background: var(--manager-control-bg);
+}
+
+.managers-table tbody tr:nth-child(even) td {
+  background: #fffefb;
 }
 
 .managers-table th:nth-child(1),
@@ -726,4 +797,7 @@ h1 {
   width: 4.16667vw;
   height: 1.35417vw;
 }
+
+
+
 

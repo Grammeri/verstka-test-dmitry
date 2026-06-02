@@ -2,7 +2,7 @@ const navLinks = document.querySelectorAll(".nav-link");
 const managerEmailInput = document.querySelector(".manager-field-email input");
 const managerPrefixInput = document.querySelector(".manager-field-prefix input");
 const managerAddButton = document.querySelector(".manager-add-btn");
-const managerRemoveButton = document.querySelector(".manager-remove-btn");
+const managerRowActions = document.querySelector(".manager-row-actions");
 const managerSelect = document.querySelector(".manager-select");
 const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
 const managerSelectValue = managerSelect?.querySelector(".manager-select-value");
@@ -148,11 +148,35 @@ function getNextManagerId() {
   return String((ids.length ? Math.max(...ids) : 22) + 1);
 }
 
+function updateManagersCardHeight() {
+  const card = document.querySelector(".import-card");
+
+  if (!card) {
+    return;
+  }
+
+  const baseHeight = 39.16667;
+  const tableTop = 11.5625;
+  const tableHeadHeight = 3.125;
+  const tableRowHeight = 2.55208;
+  const bottomGap = 1.5625;
+  const contentHeight = tableTop + tableHeadHeight + managers.length * tableRowHeight + bottomGap;
+
+  card.style.height = `${Math.max(baseHeight, contentHeight)}vw`;
+}
+
+function getSortedManagers() {
+  return [...managers].sort((firstManager, secondManager) =>
+    firstManager.prefix.localeCompare(secondManager.prefix, "ru", { sensitivity: "base" })
+  );
+}
+
 function renderManagersData() {
   const tableBody = document.querySelector(".managers-table tbody");
+  const sortedManagers = getSortedManagers();
 
   if (tableBody) {
-    tableBody.innerHTML = managers.map((manager, index) => `
+    tableBody.innerHTML = sortedManagers.map((manager, index) => `
       <tr>
         <td>${index + 1}</td>
         <td>${manager.id}</td>
@@ -163,8 +187,16 @@ function renderManagersData() {
   }
 
   if (managerSelectMenu) {
-    managerSelectMenu.innerHTML = managers.map((manager) => `
+    managerSelectMenu.innerHTML = sortedManagers.map((manager) => `
       <li role="option" data-value="${manager.prefix}" aria-selected="false">${manager.prefix}</li>
+    `).join("");
+  }
+
+  updateManagersCardHeight();
+
+  if (managerRowActions) {
+    managerRowActions.innerHTML = sortedManagers.map((manager) => `
+      <button class="manager-row-remove-btn" type="button" data-id="${manager.id}" aria-label="Удалить менеджера ${manager.prefix}"></button>
     `).join("");
   }
 }
@@ -394,16 +426,15 @@ if (managerAddButton && managerEmailInput && managerPrefixInput) {
     setManagerSelectOpen(false);
   });
 }
-if (managerRemoveButton && managerSelectMenu) {
-  managerRemoveButton.addEventListener("click", () => {
-    const selectedItem = managerSelectMenu.querySelector("li.is-active");
-    const selectedValue = selectedItem?.dataset.value;
+if (managerRowActions) {
+  managerRowActions.addEventListener("click", (event) => {
+    const button = event.target.closest(".manager-row-remove-btn");
 
-    if (!selectedValue) {
+    if (!button) {
       return;
     }
 
-    const managerIndex = managers.findIndex((manager) => manager.prefix === selectedValue);
+    const managerIndex = managers.findIndex((manager) => manager.id === button.dataset.id);
 
     if (managerIndex === -1) {
       return;
@@ -475,6 +506,9 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
+
+
 
 
 
