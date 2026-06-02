@@ -237,6 +237,15 @@ function renderManagersPageText() {
   });
 
   document.querySelectorAll(".managers-table th, .managers-table td").forEach((cell) => {
+    if (cell.classList.contains("manager-editable-cell")) {
+      const text = cell.textContent.trim();
+
+      cell.dataset.text = text;
+      cell.setAttribute("aria-label", text);
+      cell.textContent = text;
+      return;
+    }
+
     const text = cell.textContent.trim();
     const columnIndex = cell.cellIndex;
     const widths = [48, 48, 330, 120];

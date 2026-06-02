@@ -604,9 +604,8 @@ h1 {
   position: relative;
   cursor: text;
 }
-.manager-editable-cell[data-field="email"],
-.manager-editable-cell[data-field="email"] .svg-label,
-.manager-editable-cell[data-field="email"] .svg-label * {
+.manager-editable-cell,
+.manager-editable-cell * {
   cursor: text;
 }
 .manager-table-edit-input {
@@ -630,18 +629,7 @@ h1 {
   appearance: none;
   -webkit-appearance: none;
 }
-
-
-
-.manager-table-edit-input.manager-table-edit-input--prefix {
-  top: 0.59896vw;
-  bottom: auto;
-  height: 1.35417vw;
-  padding-top: 0;
-  padding-bottom: 0;
-  font-size: 1.09375vw;
-  line-height: 1.35417vw;
-}.manager-table-edit-input:focus {
+.manager-table-edit-input:focus {
   outline: 0;
   caret-color: var(--blue);
 }
