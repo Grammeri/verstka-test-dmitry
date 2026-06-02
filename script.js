@@ -73,7 +73,7 @@ function createSvgText(text, options = {}) {
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
   svg.setAttribute("aria-hidden", "true");
-  svg.style.overflow = "visible";
+  svg.style.overflow = options.overflow || "visible";
 
   label.setAttribute("x", options.x ?? 0);
   label.setAttribute("y", options.y ?? Math.round(fontSize * 0.82));
@@ -241,6 +241,7 @@ function renderManagersPageText() {
       size: textSize,
       width: widths[columnIndex] || 160,
       height: 26,
+      overflow: "hidden",
       x: textX,
       y: textY,
       weight: 300,
@@ -254,6 +255,7 @@ function renderManagersPageText() {
       size: 21,
       width: 80,
       height: 26,
+      overflow: "hidden",
       y: 20,
       weight: 300,
       color: "currentColor",
@@ -309,6 +311,7 @@ function renderManagerSelectValue(value = "") {
     size: isDefault ? 21.6 : 21,
     width: isDefault ? 232 : 80,
     height: 26,
+    overflow: "hidden",
     x: isDefault ? -1 : 2,
     y: isDefault ? 19 : 18,
     weight: 300,
@@ -342,7 +345,13 @@ if (managerAddButton && managerEmailInput && managerPrefixInput) {
     const email = managerEmailInput.value.trim();
     const prefix = managerPrefixInput.value.trim();
 
-    if (!email || !prefix) {
+    if (!email) {
+      managerEmailInput.focus();
+      return;
+    }
+
+    if (!prefix) {
+      managerPrefixInput.focus();
       return;
     }
 
@@ -444,6 +453,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
