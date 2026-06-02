@@ -340,6 +340,10 @@ function setManagerSelectValue(value = "") {
   });
 }
 
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function showInputError(input, message) {
   input.setCustomValidity(message);
   input.reportValidity();
@@ -355,8 +359,16 @@ if (managerAddButton && managerEmailInput && managerPrefixInput) {
     const email = managerEmailInput.value.trim();
     const prefix = managerPrefixInput.value.trim();
 
+    managerEmailInput.setCustomValidity("");
+    managerPrefixInput.setCustomValidity("");
+
     if (!email) {
       showInputError(managerEmailInput, "Заполните Email");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      showInputError(managerEmailInput, "Введите корректный Email");
       return;
     }
 
@@ -463,6 +475,7 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
 
 
 
