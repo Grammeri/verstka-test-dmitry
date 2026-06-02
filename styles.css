@@ -764,7 +764,7 @@ h1 {
 .manager-select-menu {
   position: absolute;
   left: 0;
-  top: calc(var(--manager-control-height) - var(--manager-select-active-border-width));
+  top: calc(var(--manager-table-body-row-height) - var(--manager-select-active-border-width));
   width: 100%;
   margin: 0;
   padding: 0;
@@ -778,7 +778,7 @@ h1 {
 .manager-select-menu li {
   display: flex;
   align-items: center;
-  height: var(--manager-control-height);
+  height: var(--manager-table-body-row-height);
   padding: 0 0.78125vw;
   color: var(--manager-control-icon);
   font-size: 1.09375vw;
