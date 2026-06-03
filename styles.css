@@ -822,11 +822,26 @@ h1 {
 
 .manager-select-menu li.is-active {
   background: var(--manager-select-option-active-bg);
+  color: var(--blue);
 }
 
 .manager-select-menu li:hover,
 .manager-select-menu li.is-active:hover {
   background: var(--manager-select-option-hover-bg);
+  color: var(--blue);
+}
+
+.manager-select-menu li:hover .svg-label text,
+.manager-select-menu li.is-active .svg-label text {
+  fill: var(--blue);
+}
+
+.manager-select--selected .manager-select-btn:hover {
+  color: var(--blue);
+}
+
+.manager-select--selected .manager-select-btn:hover .svg-label text {
+  fill: var(--blue);
 }
 
 .manager-form-title .svg-label {
