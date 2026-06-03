@@ -739,27 +739,14 @@ h1 {
   transform: translateY(-50%);
 }
 
-
 .manager-select--selected .manager-select-chevron {
   right: var(--manager-select-selected-arrow-right);
-}.manager-select--open .manager-select-chevron {
-  position: absolute;
-  right: var(--manager-select-arrow-right);
-  top: 50%;
-  width: var(--manager-select-arrow-width);
-  height: var(--manager-select-arrow-height);
-  background-image: url("data:image/svg+xml,%3Csvg width='16' height='7.5' viewBox='0 0 16 7.5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.25L8 6.75L15 1.25' stroke='%2362560E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-  pointer-events: none;
-  transform: translateY(-50%);
 }
 
-
-.manager-select--selected .manager-select-chevron {
-  right: var(--manager-select-selected-arrow-right);
-}.manager-select-clear {
+.manager-select--open .manager-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+.manager-select-clear {
   position: absolute;
   right: var(--manager-select-clear-right);
   top: 50%;
