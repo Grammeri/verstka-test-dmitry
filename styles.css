@@ -585,6 +585,21 @@ h1 {
   height: var(--manager-table-head-row-height);
   font-weight: 300;
 }
+/* Firefox: lock table head label position during zoom */
+.managers-table thead th {
+  position: relative;
+}
+
+.managers-table thead th > .svg-label {
+  position: absolute;
+  left: 0.52083vw;
+  top: 0.88542vw;
+  display: block;
+  width: calc(100% - 1.04166vw);
+  height: 1.35417vw;
+  transform: none;
+  backface-visibility: visible;
+}
 
 .managers-table td {
   height: var(--manager-table-body-row-height);
