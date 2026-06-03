@@ -184,9 +184,38 @@ function updateManagersCardHeight() {
   card.style.height = `${Math.max(baseHeight, tableHeight, selectHeight)}vw`;
 }
 
+function getPrefixScriptGroup(prefix) {
+  const firstChar = prefix.trim()[0];
+
+  if (!firstChar) {
+    return 2;
+  }
+
+  if (/[A-Za-z]/.test(firstChar)) {
+    return 0;
+  }
+
+  if (/[\u0400-\u04FF]/.test(firstChar)) {
+    return 1;
+  }
+
+  return 2;
+}
+
+function compareManagerPrefixes(firstPrefix, secondPrefix) {
+  const firstGroup = getPrefixScriptGroup(firstPrefix);
+  const secondGroup = getPrefixScriptGroup(secondPrefix);
+
+  if (firstGroup !== secondGroup) {
+    return firstGroup - secondGroup;
+  }
+
+  return firstPrefix.localeCompare(secondPrefix, "ru", { sensitivity: "base" });
+}
+
 function getSortedManagers() {
   return [...managers].sort((firstManager, secondManager) =>
-    firstManager.prefix.localeCompare(secondManager.prefix, "ru", { sensitivity: "base" })
+    compareManagerPrefixes(firstManager.prefix, secondManager.prefix)
   );
 }
 
