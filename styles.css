@@ -558,6 +558,8 @@ h1 {
   padding: 0 0.52083vw;
   border: var(--figma-hairline) solid var(--manager-control-border);
   background: var(--manager-control-bg);
+  font-size: 0;
+  line-height: 0;
   text-align: left;
   vertical-align: middle;
 }
