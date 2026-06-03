@@ -546,22 +546,39 @@ h1 {
   top: 11.5625vw;
   width: 37.55208vw;
   table-layout: fixed;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: var(--figma-hairline) solid var(--manager-control-border);
   color: var(--manager-control-icon);
   font-size: 1.09375vw;
   font-weight: 300;
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 .managers-table th,
 .managers-table td {
   height: var(--manager-control-height);
   padding: 0 0.52083vw;
-  border: var(--figma-hairline) solid var(--manager-control-border);
+  border: 0;
+  border-right: var(--figma-hairline) solid var(--manager-control-border);
+  border-bottom: var(--figma-hairline) solid var(--manager-control-border);
   background: var(--manager-control-bg);
+  background-clip: padding-box;
   font-size: 0;
   line-height: 0;
   text-align: left;
   vertical-align: middle;
+  contain: layout style;
+}
+
+.managers-table th:last-child,
+.managers-table td:last-child {
+  border-right: 0;
+}
+
+.managers-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .managers-table th {
@@ -605,6 +622,7 @@ h1 {
 .manager-editable-cell {
   position: relative;
   cursor: text;
+  contain: none;
 }
 .manager-editable-cell,
 .manager-editable-cell * {
@@ -623,9 +641,10 @@ h1 {
   color: var(--manager-control-icon);
   caret-color: var(--blue);
   cursor: text;
-  font: inherit;
+  font-family: Roboto, Arial, sans-serif;
   font-size: 1.09375vw;
   font-weight: 300;
+  font-style: normal;
   line-height: var(--manager-table-body-row-height);
   outline: 0;
   appearance: none;
@@ -833,6 +852,10 @@ h1 {
   display: block;
   width: 100%;
   height: 1.35417vw;
+  shape-rendering: geometricPrecision;
+  text-rendering: geometricPrecision;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .manager-select-menu .svg-label {

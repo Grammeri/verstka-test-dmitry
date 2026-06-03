@@ -92,6 +92,14 @@ function createSvgText(text, options = {}) {
     label.setAttribute("word-spacing", options.wordSpacing);
   }
 
+  if (options.textRendering) {
+    label.setAttribute("text-rendering", options.textRendering);
+  }
+
+  if (options.shapeRendering) {
+    svg.setAttribute("shape-rendering", options.shapeRendering);
+  }
+
   label.textContent = text;
   svg.append(label);
 
@@ -99,6 +107,11 @@ function createSvgText(text, options = {}) {
 }
 function renderElementText(element, options = {}) {
   const text = options.text || element.dataset.text || element.textContent.trim();
+  const existingSvg = element.querySelector(".svg-label");
+
+  if (!options.force && existingSvg && element.dataset.text === text) {
+    return;
+  }
 
   element.dataset.text = text;
   element.setAttribute("aria-label", text);
@@ -241,7 +254,13 @@ function renderManagersPageText() {
       return;
     }
 
-    const text = cell.textContent.trim();
+    const manager = cell.classList.contains("manager-editable-cell")
+      ? managers.find((item) => String(item.id) === cell.dataset.id)
+      : null;
+    const field = cell.dataset.field;
+    const text = manager && field
+      ? manager[field]
+      : (cell.dataset.text || cell.textContent.trim());
     const columnIndex = cell.cellIndex;
     const widths = [48, 48, 330, 120];
 
@@ -265,13 +284,13 @@ function renderManagersPageText() {
 
     if (isBody && columnIndex === 0) {
       textX = 5;
-      textY = 19;
+      textY = 20;
       textSize = 21;
     }
 
     if (isBody && columnIndex === 1) {
       textX = 2;
-      textY = 19;
+      textY = 20;
       textSize = 21;
     }
     renderElementText(cell, {
@@ -284,6 +303,8 @@ function renderManagersPageText() {
       y: textY,
       weight: 300,
       color: columnIndex === 1 ? "#0087fc" : "#62560e",
+      textRendering: "geometricPrecision",
+      shapeRendering: "geometricPrecision",
     });
   });
 
