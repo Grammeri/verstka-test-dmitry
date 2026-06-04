@@ -248,6 +248,39 @@ function renderManagersData() {
     `).join("");
   }
 }
+function syncManagerRowActions() {
+  const card = document.querySelector(".managers-card");
+  const actions = document.querySelector(".manager-row-actions");
+  const rows = [...document.querySelectorAll(".managers-table tbody tr")];
+  const buttons = [...document.querySelectorAll(".manager-row-remove-btn")];
+
+  if (!card || !actions || !rows.length || !buttons.length) {
+    return;
+  }
+
+  const cardRect = card.getBoundingClientRect();
+  const firstRowRect = rows[0].getBoundingClientRect();
+
+  actions.style.top = (firstRowRect.top - cardRect.top) + "px";
+
+  rows.forEach((row, index) => {
+    const button = buttons[index];
+
+    if (!button) {
+      return;
+    }
+
+    button.style.height = row.getBoundingClientRect().height + "px";
+  });
+}
+
+function requestSyncManagerRowActions() {
+  requestAnimationFrame(() => {
+    syncManagerRowActions();
+    requestAnimationFrame(syncManagerRowActions);
+  });
+}
+
 function renderManagersPageText() {
   const managerFormTitle = document.querySelector(".manager-form-title");
 
@@ -375,6 +408,13 @@ function renderStaticText() {
 }
 
 renderStaticText();
+
+window.addEventListener("load", requestSyncManagerRowActions);
+window.addEventListener("resize", requestSyncManagerRowActions);
+
+if (document.fonts) {
+  document.fonts.ready.then(requestSyncManagerRowActions);
+}
 
 function setManagerSelectOpen(isOpen) {
   if (!managerSelect || !managerSelectButton || !managerSelectMenu) {
@@ -689,6 +729,8 @@ navLinks.forEach((link) => {
     renderNavText(link);
   });
 });
+
+
 
 
 
