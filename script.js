@@ -3,6 +3,7 @@ const managerEmailInput = document.querySelector(".manager-field-email input");
 const managerPrefixInput = document.querySelector(".manager-field-prefix input");
 const managerAddButton = document.querySelector(".manager-add-btn");
 const managerRowActions = document.querySelector(".manager-row-actions");
+const managerRowActionsBody = document.querySelector(".manager-row-actions-table tbody");
 const managersTableBody = document.querySelector(".managers-table tbody");
 const managerSelect = document.querySelector(".manager-select");
 const managerSelectButton = managerSelect?.querySelector(".manager-select-btn");
@@ -242,9 +243,13 @@ function renderManagersData() {
 
   updateManagersCardHeight();
 
-  if (managerRowActions) {
-    managerRowActions.innerHTML = sortedManagers.map((manager) => `
-      <button class="manager-row-remove-btn" type="button" data-id="${manager.id}" aria-label="Удалить менеджера ${manager.prefix}"></button>
+  if (managerRowActionsBody) {
+    managerRowActionsBody.innerHTML = sortedManagers.map((manager) => `
+      <tr>
+        <td>
+          <button class="manager-row-remove-btn" type="button" data-id="${manager.id}" aria-label="Удалить менеджера ${manager.prefix}"></button>
+        </td>
+      </tr>
     `).join("");
   }
 }
