@@ -67,6 +67,7 @@
 
   --manager-select-focus-border: var(--blue);
   --manager-select-active-border-width: 2px;
+  --manager-select-field-active-border-width: 1.3px;
 }
 
 @font-face {
@@ -729,7 +730,7 @@ h1 {
 .manager-select-btn:focus-visible {
   border-color: var(--manager-select-focus-border);
   border-width: var(--figma-hairline);
-  box-shadow: inset 0 0 0 calc(var(--manager-select-active-border-width) - var(--figma-hairline)) var(--manager-select-focus-border);
+  box-shadow: inset 0 0 0 calc(var(--manager-select-field-active-border-width) - var(--figma-hairline)) var(--manager-select-focus-border);
   outline: 0;
 }
 
@@ -891,11 +892,11 @@ h1 {
 }
 
 .manager-select--selected .manager-select-btn:hover {
-  color: var(--blue);
+  color: var(--manager-control-icon);
 }
 
 .manager-select--selected .manager-select-btn:hover .svg-label text {
-  fill: var(--blue);
+  fill: var(--manager-control-icon);
 }
 
 .manager-form-title .svg-label {
