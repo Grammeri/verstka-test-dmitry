@@ -103,10 +103,15 @@
             <button class="manager-select-btn" type="button" aria-haspopup="listbox" aria-expanded="false"
               aria-controls="manager-select-menu">
               <span class="manager-select-value">Выбрать менеджера</span>
-              <span class="manager-select-chevron" aria-hidden="true"></span>
+              <span class="manager-select-chevron" aria-hidden="true">
+  <img class="manager-select-chevron-icon manager-select-chevron-icon--down" src="assets/icons/chevron-down.svg" alt="">
+  <img class="manager-select-chevron-icon manager-select-chevron-icon--up" src="assets/icons/chevron-up.svg" alt="">
+</span>
             </button>
 
-            <button class="manager-select-clear" type="button" aria-label="Очистить выбор" hidden></button>
+            <button class="manager-select-clear" type="button" aria-label="Очистить выбор" hidden>
+  <img class="manager-select-clear-icon" src="assets/icons/cross-circle.svg" alt="">
+</button>
 
             <ul class="manager-select-menu" id="manager-select-menu" role="listbox" hidden>
               <li role="option" data-value="Z" aria-selected="false">Z</li>
@@ -130,4 +135,5 @@
 </body>
 
 </html>
+
 
