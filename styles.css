@@ -29,6 +29,15 @@
 
   --manager-table-body-row-height: 2.55208vw;
 
+  --manager-table-top: 11.5625vw;
+  --manager-row-actions-offset: 0.05210vw;
+
+  --manager-row-actions-top: calc(
+    var(--manager-table-top) +
+    var(--manager-table-head-row-height) +
+    var(--manager-row-actions-offset)
+  );
+
   --manager-control-bg: #ffffff;
 
   --manager-select-bg: #fffefb;
@@ -491,8 +500,9 @@ h1 {
 .manager-row-actions {
   position: absolute;
   left: 40.20833vw;
-  top: 14.6875vw;
+  top: var(--manager-row-actions-top);
   width: var(--manager-control-height);
+  line-height: 0;
   z-index: 4;
 }
 
@@ -543,7 +553,7 @@ h1 {
 .managers-table {
   position: absolute;
   left: 1.61458vw;
-  top: 11.5625vw;
+  top: var(--manager-table-top);
   width: 37.55208vw;
   table-layout: fixed;
   border-collapse: separate;
@@ -888,3 +898,7 @@ h1 {
   width: 4.16667vw;
   height: 1.35417vw;
 }
+
+
+
+
