@@ -723,6 +723,7 @@ h1 {
   cursor: pointer;
 }
 
+.manager-select:hover .manager-select-btn,
 .manager-select-btn:hover {
   border-color: var(--manager-select-focus-border);
   border-width: var(--figma-hairline);
@@ -872,10 +873,12 @@ h1 {
   fill: var(--blue);
 }
 
+.manager-select--selected:hover .manager-select-btn,
 .manager-select--selected .manager-select-btn:hover {
   color: var(--blue);
 }
 
+.manager-select--selected:hover .manager-select-btn .svg-label text,
 .manager-select--selected .manager-select-btn:hover .svg-label text {
   fill: var(--blue);
 }
